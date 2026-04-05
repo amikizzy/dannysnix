@@ -291,38 +291,38 @@
         padding: 0px;
       }
 
-      @define-color base   #1e1e2e;
-      @define-color mantle #181825;
-      @define-color crust  #11111b;
+      @define-color base   #1a2a1a;
+      @define-color mantle #151f15;
+      @define-color crust  #101810;
 
-      @define-color text     #cdd6f4;
-      @define-color subtext0 #a6adc8;
-      @define-color subtext1 #bac2de;
+      @define-color text     #c8d5c8;
+      @define-color subtext0 #8a9a8a;
+      @define-color subtext1 #a0b0a0;
 
-      @define-color surface0 #313244;
-      @define-color surface1 #45475a;
-      @define-color surface2 #585b70;
+      @define-color surface0 #2d4a2d;
+      @define-color surface1 #3a5a3a;
+      @define-color surface2 #4a6a4a;
 
-      @define-color overlay0 #6c7086;
-      @define-color overlay1 #7f849c;
-      @define-color overlay2 #9399b2;
+      @define-color overlay0 #4a5a4a;
+      @define-color overlay1 #5a6a5a;
+      @define-color overlay2 #6a7a6a;
 
-      @define-color blue      #89b4fa;
-      @define-color lavender  #b4befe;
-      @define-color sapphire  #74c7ec;
-      @define-color sky       #89dceb;
-      @define-color teal      #94e2d5;
-      @define-color green     #a6e3a1;
-      @define-color yellow    #f9e2af;
+      @define-color blue      #4a8a7a;
+      @define-color lavender  #5a9a5a;
+      @define-color sapphire  #7a9a8a;
+      @define-color sky       #a0a870;
+      @define-color teal      #c05a5a;
+      @define-color green     #8a7a9a;
+      @define-color yellow    #5a8a8a;
       @define-color peach     #fab387;
-      @define-color maroon    #eba0ac;
-      @define-color red       #f38ba8;
-      @define-color mauve     #cba6f7;
-      @define-color pink      #f5c2e7;
-      @define-color flamingo  #f2cdcd;
-      @define-color rosewater #f5e0dc;
+      @define-color maroon    #a07070;
+      @define-color red       #b0a898;
+      @define-color mauve     #7a9a8a;
+      @define-color pink      #8a7a9a;
+      @define-color flamingo  #9a8a8a;
+      @define-color rosewater #b0a898;
 
-      @define-color theme_base_color #1e1e2e;
+      @define-color theme_base_color #1a2a1a;
 
       window#waybar {
         background: transparent;
