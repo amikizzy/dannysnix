@@ -558,11 +558,11 @@
       inherit (config.lib.formats.rasi) mkLiteral;
     in {
       "*" = {
-        bg = mkLiteral "#1e2132";
-        bg-alt = mkLiteral "#2a2f45";
-        bg-selected = mkLiteral "#3d5c8a";
-        fg = mkLiteral "#c8d3f5";
-        fg-dim = mkLiteral "#7a8aaa";
+        bg = mkLiteral "#1a2a1a";
+        bg-alt = mkLiteral "#2d4a2d";
+        bg-selected = mkLiteral "#4a8a7a";
+        fg = mkLiteral "#c8d5c8";
+        fg-dim = mkLiteral "#8a9a8a";
         font = "JetBrainsMono Nerd Font 13";
       };
       "window" = {
