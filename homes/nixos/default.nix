@@ -744,6 +744,8 @@
 
       bind = [
         # Core
+        "SUPER, S, exec, grim /home/danny/Pictures/screenshot.png"
+        "SUPER SHIFT, S, exec, grim -g \"$(slurp)\" /home/danny/Pictures/screenshot.png"
         "SUPER, Return, exec, ghostty"
         "SUPER SHIFT, F, togglefloating"
         "SUPER, E, exec, rofi -show drun"
