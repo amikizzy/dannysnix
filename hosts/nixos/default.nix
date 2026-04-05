@@ -42,6 +42,11 @@
     enable = true;
     withUWSM = true;
   };
+
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true;
+  };
   
   nixpkgs = {
       config = {

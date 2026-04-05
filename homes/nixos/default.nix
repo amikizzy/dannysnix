@@ -15,14 +15,616 @@
     vim
     btop
     ghostty
+    steam
+    vscode
+    spotify
+    neovim
 
-    # Hyprland Specific
+   # Hyprland Specific
     wlr-randr
     pamixer
     brightnessctl
     wbg
-    tofi
+    rofi
+
+    # Waybar extras
+    pavucontrol
+    swaynotificationcenter
+    wlogout
+    nerd-fonts.jetbrains-mono
+    papirus-icon-theme
   ];
+
+  # Waybar
+  programs.waybar = {
+    enable = true;
+    settings = [
+      {
+        layer = "top";
+        position = "top";
+        mode = "dock";
+        height = 48;
+        exclusive = true;
+        passthrough = false;
+        gtk-layer-shell = true;
+        ipc = true;
+        fixed-center = true;
+        margin-top = 5;
+        margin-left = 5;
+        margin-right = 5;
+        margin-bottom = 0;
+
+        modules-left = [
+          "group/gleft1"
+          "hyprland/window"
+        ];
+        modules-center = [
+          "hyprland/workspaces"
+          "mpris"
+        ];
+        modules-right = [
+          "group/gright1"
+          "clock"
+          "group/gright2"
+        ];
+
+        "group/gleft1" = {
+          orientation = "horizontal";
+          modules = [
+            "custom/icon"
+            "cpu"
+            "memory"
+            "temperature"
+          ];
+        };
+
+        "group/gright1" = {
+          orientation = "horizontal";
+          modules = [
+            "battery"
+            "backlight"
+            "pulseaudio"
+            "network"
+          ];
+        };
+
+        "group/gright2" = {
+          orientation = "horizontal";
+          modules = [
+            "tray"
+            "custom/notification"
+            "custom/power"
+          ];
+        };
+
+        "custom/icon" = {
+          format = " ";
+        };
+
+        "custom/notification" = {
+          tooltip = false;
+          format = "{icon}";
+          format-icons = {
+            notification = "<span foreground='red'><sup></sup></span>";
+            none = "";
+            dnd-notification = "<span foreground='red'><sup></sup></span>";
+            dnd-none = "";
+            inhibited-notification = "<span foreground='red'><sup></sup></span>";
+            inhibited-none = "";
+            dnd-inhibited-notification = "<span foreground='red'><sup></sup></span>";
+            dnd-inhibited-none = "";
+          };
+          return-type = "json";
+          exec-if = "which swaync-client";
+          exec = "swaync-client -swb";
+          on-click = "swaync-client -t -sw";
+          on-click-right = "swaync-client -d -sw";
+          escape = true;
+        };
+
+        "custom/power" = {
+          format = "⏻";
+          on-click = "wlogout -b 4";
+          interval = 86400;
+          tooltip = false;
+        };
+
+        "mpris" = {
+          format = "{player_icon} {title} - {artist}";
+          format-paused = "{status_icon} <i>{title} - {artist}</i>";
+          player-icons = {
+            default = "▶";
+            spotify = "";
+            mpv = "󰐹";
+            vlc = "󰕼";
+            firefox = "";
+          };
+          status-icons = {
+            paused = "⏸";
+            playing = "";
+          };
+          ignored-players = [ "firefox" ];
+          max-length = 30;
+        };
+
+        "temperature" = {
+          critical-threshold = 88;
+          format = "{icon} {temperatureC}°C";
+          format-icons = [ "" "" "" ];
+          interval = 10;
+        };
+
+        "hyprland/workspaces" = {
+          disable-scroll = true;
+          all-outputs = true;
+          active-only = false;
+          on-click = "activate";
+          format = "{icon}";
+          format-icons = {
+            "1" = "";
+            "2" = "";
+            "3" = "";
+            "4" = "";
+            "5" = "";
+            urgent = "";
+            active = "";
+            default = "";
+            sort-by-number = true;
+          };
+          persistent-workspaces = {
+            "1" = [ ];
+            "2" = [ ];
+            "3" = [ ];
+            "4" = [ ];
+            "5" = [ ];
+          };
+        };
+
+        "hyprland/window" = {
+          format = "  {}";
+          separate-outputs = true;
+          rewrite = {
+            "(.*) — Mozilla Firefox" = "$1 󰈹";
+            "(.*)Mozilla Firefox" = "Firefox 󰈹";
+            "(.*) - Visual Studio Code" = "$1 󰨞";
+            "(.*)Visual Studio Code" = "Code 󰨞";
+            "(.*)Spotify" = "Spotify 󰓇";
+            "(.*)Steam" = "Steam 󰓓";
+          };
+          max-length = 60;
+        };
+
+        "clock" = {
+          format = "{:%a %d %b %R}";
+          format-alt = "{:%a %d %b %I:%M %p}";
+          tooltip-format = "<tt><big>{calendar}</big></tt>";
+          calendar = {
+            mode = "month";
+            mode-mon-col = 3;
+            on-scroll = 1;
+            on-click-right = "mode";
+            format = {
+              months = "<span color='#ffead3'><b>{}</b></span>";
+              weekdays = "<span color='#ffcc66'><b>{}</b></span>";
+              today = "<span color='#ff6699'><b>{}</b></span>";
+            };
+          };
+        };
+
+        "cpu" = {
+          interval = 10;
+          format = "󰍛 {usage}%";
+        };
+
+        "memory" = {
+          interval = 30;
+          format = "󰾆 {percentage}%";
+          format-alt = "󰾅 {used}GB";
+          max-length = 10;
+          tooltip = true;
+          tooltip-format = " {used:.1f}GB/{total:.1f}GB";
+        };
+
+        "backlight" = {
+          format = "{icon} {percent}%";
+          format-icons = [ "" "" "" "" "" "" "" ];
+          on-scroll-up = "${pkgs.brightnessctl}/bin/brightnessctl set 2%+";
+          on-scroll-down = "${pkgs.brightnessctl}/bin/brightnessctl set 2%-";
+        };
+
+        "network" = {
+          format-wifi = "📡 {essid}";
+          format-ethernet = "󱘖 Wired";
+          format-linked = "󱘖 {ifname} (No IP)";
+          format-disconnected = "󰤮 Disconnected";
+          tooltip-format = "󱘖 {ipaddr}  {bandwidthUpBytes}  {bandwidthDownBytes}";
+          interval = 5;
+        };
+
+        "pulseaudio" = {
+          format = "{icon} {volume}%";
+          format-muted = " ";
+          on-click = "pavucontrol -t 3";
+          tooltip-format = "{icon} {desc} // {volume}%";
+          scroll-step = 4;
+          format-icons = {
+            headphone = "";
+            hands-free = "";
+            headset = "";
+            phone = "";
+            portable = "";
+            car = "";
+            default = [ "" "" "" ];
+          };
+        };
+
+        "tray" = {
+          icon-size = 20;
+          spacing = 5;
+        };
+
+        "battery" = {
+          states = {
+            good = 95;
+            warning = 30;
+            critical = 20;
+          };
+          format = "{icon} {capacity}%";
+          format-charging = " {capacity}%";
+          format-plugged = " {capacity}%";
+          format-alt = "{time} {icon}";
+          format-icons = [ "󰂎" "󰁺" "󰁻" "󰁼" "󰁽" "󰁾" "󰁿" "󰂀" "󰂁" "󰂂" "󰁹" ];
+        };
+      }
+    ];
+
+    style = ''
+      * {
+        font-family: "JetBrainsMono Nerd Font";
+        font-size: 16px;
+        border: none;
+        border-radius: 0px;
+        min-height: 0;
+        margin: 0px;
+        padding: 0px;
+      }
+
+      @define-color base   #1e1e2e;
+      @define-color mantle #181825;
+      @define-color crust  #11111b;
+
+      @define-color text     #cdd6f4;
+      @define-color subtext0 #a6adc8;
+      @define-color subtext1 #bac2de;
+
+      @define-color surface0 #313244;
+      @define-color surface1 #45475a;
+      @define-color surface2 #585b70;
+
+      @define-color overlay0 #6c7086;
+      @define-color overlay1 #7f849c;
+      @define-color overlay2 #9399b2;
+
+      @define-color blue      #89b4fa;
+      @define-color lavender  #b4befe;
+      @define-color sapphire  #74c7ec;
+      @define-color sky       #89dceb;
+      @define-color teal      #94e2d5;
+      @define-color green     #a6e3a1;
+      @define-color yellow    #f9e2af;
+      @define-color peach     #fab387;
+      @define-color maroon    #eba0ac;
+      @define-color red       #f38ba8;
+      @define-color mauve     #cba6f7;
+      @define-color pink      #f5c2e7;
+      @define-color flamingo  #f2cdcd;
+      @define-color rosewater #f5e0dc;
+
+      @define-color theme_base_color #1e1e2e;
+
+      window#waybar {
+        background: transparent;
+      }
+
+      window#waybar.hidden {
+        opacity: 0.2;
+      }
+
+      #gleft1, #gright1 {
+        padding: 0px 0px 0px 5px;
+        margin: 6px 10px 2px 3px;
+        border: 3px solid rgba(14, 14, 14, .1);
+        border-radius: 30px;
+        background: @theme_base_color;
+        box-shadow: 0 0 2px rgba(0, 0, 0, 0.6);
+        transition: all .3s ease;
+        min-width: 120px;
+      }
+
+      #gright2 {
+        margin: 6px 10px 2px 3px;
+        border: 3px solid rgba(14, 14, 14, .1);
+        border-radius: 30px;
+        background: @theme_base_color;
+        box-shadow: 0 0 2px rgba(0, 0, 0, 0.6);
+        padding: 0px 0px 0px 5px;
+        transition: all .3s ease;
+      }
+
+      #window {
+        padding: 0px;
+        margin: 6px 10px 2px 3px;
+        border: 3px solid rgba(14, 14, 14, .1);
+        border-radius: 30px;
+        padding: 0px 8px;
+        color: @mauve;
+        background: @theme_base_color;
+      }
+
+      #workspaces {
+        background: @theme_base_color;
+        margin: 5px 5px;
+        padding: 8px 5px;
+        border-radius: 30px;
+        color: @mauve;
+      }
+
+      #workspaces button {
+        padding: 0px 5px;
+        margin: 0px 3px;
+        border-radius: 30px;
+        color: @teal;
+        background: transparent;
+        transition: all 0.3s ease-in-out;
+      }
+
+      #workspaces button.active {
+        background-color: @teal;
+        color: @teal;
+        border-radius: 16px;
+        min-width: 50px;
+        transition: all 0.3s ease-in-out;
+      }
+
+      #workspaces button:hover {
+        background-color: @maroon;
+        color: @maroon;
+        border-radius: 16px;
+        min-width: 50px;
+      }
+
+      #workspaces button.urgent {
+        color: @red;
+        border-radius: 0px;
+      }
+
+      #temperature {
+        color: @teal;
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+
+      #temperature.critical {
+        background-color: @red;
+      }
+
+      #tray > .passive {
+        -gtk-icon-effect: dim;
+      }
+      #tray > .needs-attention {
+        -gtk-icon-effect: highlight;
+      }
+
+      #clock {
+        color: @yellow;
+        background: @theme_base_color;
+        margin: 6px 10px 2px 2px;
+        border-radius: 30px;
+        padding-left: 5px;
+        padding-right: 5px;
+        transition: all .3s ease;
+      }
+
+      #custom-icon {
+        font-size: 20px;
+        padding-left: 2px;
+        padding-right: 5px;
+        color: @mauve;
+      }
+
+      #cpu {
+        color: @yellow;
+        font-size: 15px;
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+
+      #memory {
+        color: @green;
+        font-size: 15px;
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+
+      #battery {
+        color: #a6da95;
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+
+      @keyframes blink {
+        to { color: @surface0; }
+      }
+
+      #battery.critical:not(.charging) {
+        background-color: @red;
+        color: @text;
+        animation-name: blink;
+        animation-duration: 0.5s;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+      }
+
+      #custom-notification {
+        color: #dfdfdf;
+        padding: 0px 5px;
+        border-radius: 5px;
+      }
+
+      #backlight {
+        color: @rosewater;
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+
+      #pulseaudio {
+        color: @sapphire;
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+
+      #pulseaudio.bluetooth {
+        color: @pink;
+        background: @theme_base_color;
+      }
+
+      #pulseaudio.muted {
+        color: @red;
+      }
+
+      #network {
+        color: #EE2091;
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+
+      #network.disconnected,
+      #network.disabled {
+        background-color: @surface0;
+        color: @text;
+      }
+
+      #mpris {
+        color: @pink;
+        background: @theme_base_color;
+        margin: 6px 10px 2px 2px;
+        border-radius: 30px;
+        padding-left: 5px;
+        padding-right: 5px;
+        transition: all .3s ease;
+      }
+
+      #custom-power {
+        color: @red;
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+
+      tooltip {
+        background: #1e1e2e;
+        border-radius: 8px;
+      }
+
+      tooltip label {
+        color: @text;
+        margin-right: 5px;
+        margin-left: 5px;
+      }
+    '';
+  };
+
+
+  # Rofi
+  programs.rofi = {
+    enable = true;
+    package = pkgs.rofi;
+    terminal = "${pkgs.ghostty}/bin/ghostty";
+    extraConfig = {
+      modi = "drun,run";
+      show-icons = true;
+      icon-theme = "Papirus";
+      drun-display-format = "{name}";
+      display-drun = "Search Applications...";
+      scroll-method = 0;
+      disable-history = false;
+      sidebar-mode = false;
+      columns = 2;
+      lines = 9;
+    };
+    theme = let
+      inherit (config.lib.formats.rasi) mkLiteral;
+    in {
+      "*" = {
+        bg = mkLiteral "#1e2132";
+        bg-alt = mkLiteral "#2a2f45";
+        bg-selected = mkLiteral "#3d5c8a";
+        fg = mkLiteral "#c8d3f5";
+        fg-dim = mkLiteral "#7a8aaa";
+        font = "JetBrainsMono Nerd Font 13";
+      };
+      "window" = {
+        background-color = mkLiteral "@bg";
+        border = mkLiteral "0px";
+        border-radius = mkLiteral "12px";
+        padding = mkLiteral "20px";
+        width = mkLiteral "700px";
+      };
+      "mainbox" = {
+        background-color = mkLiteral "transparent";
+        spacing = mkLiteral "10px";
+      };
+      "inputbar" = {
+        background-color = mkLiteral "@bg-alt";
+        border-radius = mkLiteral "8px";
+        padding = mkLiteral "10px 14px";
+        spacing = mkLiteral "8px";
+        children = mkLiteral "[prompt, entry]";
+      };
+      "prompt" = {
+        background-color = mkLiteral "transparent";
+        text-color = mkLiteral "@fg-dim";
+      };
+      "entry" = {
+        background-color = mkLiteral "transparent";
+        text-color = mkLiteral "@fg";
+        placeholder-color = mkLiteral "@fg-dim";
+      };
+      "listview" = {
+        background-color = mkLiteral "transparent";
+        columns = 2;
+        lines = 9;
+        spacing = mkLiteral "6px";
+        scrollbar = false;
+      };
+      "element" = {
+        background-color = mkLiteral "transparent";
+        border-radius = mkLiteral "8px";
+        padding = mkLiteral "8px 10px";
+        spacing = mkLiteral "10px";
+        orientation = mkLiteral "horizontal";
+      };
+      "element selected" = {
+        background-color = mkLiteral "@bg-selected";
+        text-color = mkLiteral "@fg";
+      };
+      "element-icon" = {
+        background-color = mkLiteral "transparent";
+        size = mkLiteral "32px";
+      };
+      "element-text" = {
+        background-color = mkLiteral "transparent";
+        text-color = mkLiteral "@fg";
+        vertical-align = mkLiteral "0.5";
+      };
+      "element normal" = {
+        text-color = mkLiteral "@fg";
+      };
+      "element alternate" = {
+        background-color = mkLiteral "transparent";
+      };
+    };
+  };
 
   # Git
   programs.git = {
@@ -52,29 +654,20 @@
       };
 
       general = {
-        # Master/Stack
         layout = "master";
-
-        # out = in*2
         gaps_in = 2;
         gaps_out = 4;
         border_size = 1;
-
         "col.active_border" = "rgba(ffffffff)";
         "col.inactive_border" = "rgba(000000ff)";
-
         resize_on_border = true;
         allow_tearing = false;
       };
 
       decoration = {
-        # Rounding
         rounding = 0;
-
-        # Opacity
         active_opacity = 1;
         inactive_opacity = 1;
-
         shadow = {
           enabled = false;
           range = 4;
@@ -82,7 +675,6 @@
           ignore_window = true;
           color = "rgba(20,20,20,0.5)";
         };
-
         blur = {
           enabled = false;
           size = 4;
@@ -94,33 +686,20 @@
 
       animations = {
         enabled = true;
-
-        bezier = [
-          "snap, 0.2, 0, 0, 1"
-        ];
-
+        bezier = [ "snap, 0.2, 0, 0, 1" ];
         animation = [
-          # Disable top level animations which children inherit.
           "windows, 0"
           "layers, 0"
           "fade, 0"
           "border, 0"
           "borderangle, 0"
           "zoomFactor, 0"
-
           "workspaces, 1, 2, snap, slide"
         ];
       };
 
       input = {
-        # Mouse/Pointer
-        #follow_mouse = 0;
-        #mouse_refocus = false;
-
-        # Keyboard
         kb_layout = "gb";
-
-        # Touchpad
         touchpad = {
           tap-to-click = false;
           scroll_factor = 1;
@@ -136,8 +715,6 @@
       };
 
       render = {
-        # Direct scanout attempts to reduce lag when
-        # there is only one fullscreen application on a screen.
         direct_scanout = 1;
       };
 
@@ -146,15 +723,13 @@
         disable_hyprland_logo = true;
         vfr = true;
         vrr = 0;
-        # Focus programs that request to be focused, for example
-        # pressing a link should switch to the workspace with a browser.
         focus_on_activate = true;
       };
 
       bind = [
         # Core
         "SUPER, Return, exec, ghostty"
-        "SUPER, E, exec, tofi-run | sh"
+        "SUPER, E, exec, rofi -show drun"
         "SUPER, Q, killactive"
         "SUPER, F, fullscreen"
 
@@ -185,14 +760,12 @@
         # Window Manipulation
         "SUPER SHIFT, left, layoutmsg, mfact -0.05"
         "SUPER SHIFT, right, layoutmsg, mfact +0.05"
-
         "SUPER SHIFT, F, togglefloating"
 
         # Quit
         "SUPER SHIFT, Q, exit"
       ];
 
-      # Will repeat when held.
       binde = [
         # Volume
         ",XF86AudioRaiseVolume, exec, ${pkgs.pamixer}/bin/pamixer -i 2"
@@ -215,11 +788,12 @@
       ];
 
       exec-once = [
-        #"waybar"
+        "waybar"
+        "swaync"
         "${pkgs.wbg}/bin/wbg -s /home/danny/.config/wallpaper/wallpaper.png"
       ];
     };
-};
+  };
 
   # Do not change this!
   home.stateVersion = "25.11";
