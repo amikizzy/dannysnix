@@ -33,6 +33,8 @@
     wlogout
     nerd-fonts.jetbrains-mono
     papirus-icon-theme
+    starship
+    fish
     grim
     slurp
   ];
@@ -814,6 +816,24 @@
     };
   };
 
-  # Do not change this!
+programs.fish = {
+  enable = true;
+  interactiveShellInit = ''
+    starship init fish | source
+  '';
+};
+
+programs.starship = {
+  enable = true;
+  settings = {
+    add_newline = false;
+    character = {
+      success_symbol = "[❯](bold green)";
+      error_symbol = "[❯](bold red)";
+    };
+  };
+};
+
+# Do not change this!
   home.stateVersion = "25.11";
 }

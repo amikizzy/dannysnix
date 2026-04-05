@@ -24,6 +24,16 @@
     };
   };
 
+  programs.fish.enable = true;
+  security.sudo.extraRules = [{
+    users = [ "danny" ];
+    commands = [{
+      command = "ALL";
+      options = [ "NOPASSWD" ];
+    }];
+  }];
+  users.users.danny.shell = pkgs.fish;
+
   environment = {
     sessionVariables = {
       NIXOS_OZONE_WL = "1";
