@@ -24,7 +24,7 @@
     wlr-randr
     pamixer
     brightnessctl
-    wbg
+    mpvpaper
     rofi
 
     # Waybar extras
@@ -626,6 +626,19 @@
     };
   };
 
+  # Ghostty
+  programs.ghostty = {
+    enable = true;
+    settings = {
+      background-opacity = 0.1;
+      background-blur-radius = 20;
+      keybind = [
+      "ctrl+c=copy_to_clipboard"
+      "ctrl+v=paste_from_clipboard"
+      ];
+    };
+  };
+
   # Git
   programs.git = {
     enable = true;
@@ -646,7 +659,7 @@
 
     settings = {
       monitor = [
-        #"eDP-1,highrr,auto,1"
+        #"HDMI-A-1,highrr,auto,1"
       ];
 
       xwayland = {
@@ -669,15 +682,15 @@
         active_opacity = 1;
         inactive_opacity = 1;
         shadow = {
-          enabled = false;
+          enabled = true;
           range = 4;
           render_power = 3;
           ignore_window = true;
           color = "rgba(20,20,20,0.5)";
         };
         blur = {
-          enabled = false;
-          size = 4;
+          enabled = true;
+          size = 8;
           passes = 2;
           ignore_opacity = true;
           new_optimizations = true;
@@ -729,6 +742,7 @@
       bind = [
         # Core
         "SUPER, Return, exec, ghostty"
+        "SUPER SHIFT, F, togglefloating"
         "SUPER, E, exec, rofi -show drun"
         "SUPER, Q, killactive"
         "SUPER, F, fullscreen"
@@ -790,8 +804,8 @@
       exec-once = [
         "waybar"
         "swaync"
-        "${pkgs.wbg}/bin/wbg -s /home/danny/.config/wallpaper/wallpaper.png"
-      ];
+        "${pkgs.mpvpaper}/bin/mpvpaper -o ''no-audio loop'' HDMI-A-1 /home/danny/.config/wallpaper/wallpaper.mp4"
+     ];
     };
   };
 
