@@ -33,6 +33,8 @@
     wlogout
     nerd-fonts.jetbrains-mono
     papirus-icon-theme
+    grim
+    slurp
   ];
 
   # Waybar
@@ -634,6 +636,7 @@
       background-blur-radius = 20;
       keybind = [
       "ctrl+c=copy_to_clipboard"
+      "ctrl+shift+c=text:\x03"
       "ctrl+v=paste_from_clipboard"
       ];
     };
