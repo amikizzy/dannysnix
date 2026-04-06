@@ -39,6 +39,11 @@
     fish
     grim
     slurp
+    wine
+    winetricks
+    bottles
+    scanmem
+    pince
   ];
 
   # Waybar
