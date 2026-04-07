@@ -12,7 +12,6 @@
     firefox
     vlc
     nautilus
-    vim
     btop
     ghostty
     steam
@@ -21,7 +20,7 @@
     neovim
     obs-studio
     fastfetch
-    tailscale
+    zed-editor
 
    # Hyprland Specific
     wlr-randr
@@ -46,6 +45,11 @@
     scanmem
     pince
   ];
+
+  programs.zen-browser = {
+    enable = true;
+    setAsDefaultBrowser = true;
+  };
 
   # Waybar
   programs.waybar = {

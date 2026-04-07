@@ -19,6 +19,9 @@ inputs.nixpkgs.lib.nixosSystem {
         };
         useGlobalPkgs = true;
         useUserPackages = true;
+        sharedModules = [
+          inputs.zen-browser.homeModules.beta
+        ];
       };
     }
     {

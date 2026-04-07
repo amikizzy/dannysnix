@@ -607,7 +607,8 @@
         "home-manager": "home-manager",
         "hyprland": "hyprland",
         "nix-cachyos-kernel": "nix-cachyos-kernel",
-        "nixpkgs": "nixpkgs_3"
+        "nixpkgs": "nixpkgs_3",
+        "zen-browser": "zen-browser"
       }
     },
     "systems": {
@@ -663,6 +664,29 @@
       "original": {
         "owner": "hyprwm",
         "repo": "xdg-desktop-portal-hyprland",
+        "type": "github"
+      }
+    },
+    "zen-browser": {
+      "inputs": {
+        "home-manager": [
+          "home-manager"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1775453133,
+        "narHash": "sha256-VIlMG985ONqVqF+OnPuS5Shbz5k6tqbOWnDL7EH+IT4=",
+        "owner": "0xc000022070",
+        "repo": "zen-browser-flake",
+        "rev": "8d0508ffceba8ad785ae442591dd115080a55142",
+        "type": "github"
+      },
+      "original": {
+        "owner": "0xc000022070",
+        "repo": "zen-browser-flake",
         "type": "github"
       }
     }
