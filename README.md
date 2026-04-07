@@ -1,2 +1,2 @@
 # nixos
-nix nix omggff i love nixxxxxxx 🥹🥹🥹🥹
+nix nix omggggg i love nixxxxxxx 🥹🥹🥹🥹
