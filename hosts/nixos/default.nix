@@ -24,6 +24,12 @@
     };
   };
 
+  services.tailscale = {
+    enable = true;
+    # Enable tailscale at startup
+    
+  };
+
   programs.fish.enable = true;
   security.sudo.extraRules = [{
     users = [ "danny" ];

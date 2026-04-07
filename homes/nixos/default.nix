@@ -21,6 +21,7 @@
     neovim
     obs-studio
     fastfetch
+    tailscale
 
    # Hyprland Specific
     wlr-randr
