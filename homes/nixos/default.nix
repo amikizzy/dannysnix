@@ -51,505 +51,163 @@
     setAsDefaultBrowser = true;
   };
 
-  # Waybar
-  programs.waybar = {
+programs.waybar = {
     enable = true;
-    settings = [
-      {
+    settings = {
+      mainBar = {
         layer = "top";
         position = "top";
-        mode = "dock";
-        height = 48;
-        exclusive = true;
-        passthrough = false;
-        gtk-layer-shell = true;
-        ipc = true;
-        fixed-center = true;
-        margin-top = 5;
-        margin-left = 5;
-        margin-right = 5;
-        margin-bottom = 0;
+        output = ["HDMI-A-1"];
 
-        modules-left = [
-          "group/gleft1"
-          "hyprland/window"
-        ];
-        modules-center = [
-          "hyprland/workspaces"
-          "mpris"
-        ];
+        modules-left = ["custom/shade" "hyprland/window"];
+
+        modules-center = ["hyprland/workspaces"];
+
         modules-right = [
-          "group/gright1"
+          "memory"
+          "temperature"
+          "cpu"
+          "network"
+          "pulseaudio"
+          "custom/nix"
+          "tray"
           "clock"
-          "group/gright2"
         ];
 
-        "group/gleft1" = {
-          orientation = "horizontal";
-          modules = [
-            "custom/icon"
-            "cpu"
-            "memory"
-            "temperature"
-          ];
-        };
-
-        "group/gright1" = {
-          orientation = "horizontal";
-          modules = [
-            "battery"
-            "backlight"
-            "pulseaudio"
-            "network"
-          ];
-        };
-
-        "group/gright2" = {
-          orientation = "horizontal";
-          modules = [
-            "tray"
-            "custom/notification"
-            "custom/power"
-          ];
-        };
-
-        "custom/icon" = {
-          format = " ";
-        };
-
-        "custom/notification" = {
-          tooltip = false;
-          format = "{icon}";
-          format-icons = {
-            notification = "<span foreground='red'><sup></sup></span>";
-            none = "";
-            dnd-notification = "<span foreground='red'><sup></sup></span>";
-            dnd-none = "";
-            inhibited-notification = "<span foreground='red'><sup></sup></span>";
-            inhibited-none = "";
-            dnd-inhibited-notification = "<span foreground='red'><sup></sup></span>";
-            dnd-inhibited-none = "";
-          };
-          return-type = "json";
-          exec-if = "which swaync-client";
-          exec = "swaync-client -swb";
-          on-click = "swaync-client -t -sw";
-          on-click-right = "swaync-client -d -sw";
-          escape = true;
-        };
-
-        "custom/power" = {
-          format = "⏻";
-          on-click = "wlogout -b 4";
-          interval = 86400;
-          tooltip = false;
-        };
-
-        "mpris" = {
-          format = "{player_icon} {title} - {artist}";
-          format-paused = "{status_icon} <i>{title} - {artist}</i>";
-          player-icons = {
-            default = "▶";
-            spotify = "";
-            mpv = "󰐹";
-            vlc = "󰕼";
-            firefox = "";
-          };
-          status-icons = {
-            paused = "⏸";
-            playing = "";
-          };
-          ignored-players = [ "firefox" ];
-          max-length = 30;
-        };
-
-        "temperature" = {
-          critical-threshold = 88;
-          format = "{icon} {temperatureC}°C";
-          format-icons = [ "" "" "" ];
-          interval = 10;
-        };
-
-        "hyprland/workspaces" = {
-          disable-scroll = true;
-          all-outputs = true;
-          active-only = false;
-          on-click = "activate";
-          format = "{icon}";
-          format-icons = {
-            "1" = "";
-            "2" = "";
-            "3" = "";
-            "4" = "";
-            "5" = "";
-            urgent = "";
-            active = "";
-            default = "";
-            sort-by-number = true;
-          };
-          persistent-workspaces = {
-            "1" = [ ];
-            "2" = [ ];
-            "3" = [ ];
-            "4" = [ ];
-            "5" = [ ];
-          };
-        };
-
-        "hyprland/window" = {
-          format = "  {}";
-          separate-outputs = true;
-          rewrite = {
-            "(.*) — Mozilla Firefox" = "$1 󰈹";
-            "(.*)Mozilla Firefox" = "Firefox 󰈹";
-            "(.*) - Visual Studio Code" = "$1 󰨞";
-            "(.*)Visual Studio Code" = "Code 󰨞";
-            "(.*)Spotify" = "Spotify 󰓇";
-            "(.*)Steam" = "Steam 󰓓";
-          };
-          max-length = 60;
-        };
-
-        "clock" = {
-          format = "{:%a %d %b %R}";
-          format-alt = "{:%a %d %b %I:%M %p}";
-          tooltip-format = "<tt><big>{calendar}</big></tt>";
+        clock = {
+          format = "󰥔 {:%H:%M:%S 󰸗 %a, %d %b %Y}";
+          format-alt = "󰥔 {:%H:%M:%S-%Z %Y-%m-%d}";
+          interval = 1;
+          tooltip-format = "<tt><small>{calendar}</small></tt>";
           calendar = {
-            mode = "month";
+            mode = "year";
             mode-mon-col = 3;
             on-scroll = 1;
-            on-click-right = "mode";
+            actions = {
+              on-click-right = "mode";
+              on-scroll-down = "shift_down";
+              on-scroll-up = "shift_up";
+            };
             format = {
-              months = "<span color='#ffead3'><b>{}</b></span>";
-              weekdays = "<span color='#ffcc66'><b>{}</b></span>";
-              today = "<span color='#ff6699'><b>{}</b></span>";
+              days = "<span color='#89b4fa'><b>{}</b></span>";
+              months = "<span color='#ffffff'><b>{}</b></span>";
+              today = "<span color='#a6e3a1'><b><u>{}</u></b></span>";
+              weekdays = "<span color='#cba6f7'><b>{}</b></span>";
             };
           };
         };
 
-        "cpu" = {
-          interval = 10;
-          format = "󰍛 {usage}%";
+        memory = {
+          interval = 1;
+          format = "{used:0.1f}G|{total:0.1f}G ";
         };
 
-        "memory" = {
-          interval = 30;
-          format = "󰾆 {percentage}%";
-          format-alt = "󰾅 {used}GB";
-          max-length = 10;
-          tooltip = true;
-          tooltip-format = " {used:.1f}GB/{total:.1f}GB";
+        cpu = {
+          interval = 1;
+          format = "{usage}|{load} ";
         };
 
-        "backlight" = {
-          format = "{icon} {percent}%";
-          format-icons = [ "" "" "" "" "" "" "" ];
-          on-scroll-up = "${pkgs.brightnessctl}/bin/brightnessctl set 2%+";
-          on-scroll-down = "${pkgs.brightnessctl}/bin/brightnessctl set 2%-";
+        temperature = {
+          # Run: ls /sys/class/hwmon/*/name to find your sensor, then set the path.
+          # Common AMD path: /sys/class/hwmon/hwmon0/temp1_input
+          hwmon-path = "/sys/class/hwmon/hwmon1/temp1_input";
+          interval = 1;
+          format = "{temperatureC}°C ";
         };
 
-        "network" = {
-          format-wifi = "📡 {essid}";
-          format-ethernet = "󱘖 Wired";
-          format-linked = "󱘖 {ifname} (No IP)";
-          format-disconnected = "󰤮 Disconnected";
-          tooltip-format = "󱘖 {ipaddr}  {bandwidthUpBytes}  {bandwidthDownBytes}";
-          interval = 5;
+        "custom/nix" = {
+          format = "󱄅";
+          tooltip = false;
         };
 
-        "pulseaudio" = {
-          format = "{icon} {volume}%";
-          format-muted = " ";
-          on-click = "pavucontrol -t 3";
-          tooltip-format = "{icon} {desc} // {volume}%";
-          scroll-step = 4;
-          format-icons = {
-            headphone = "";
-            hands-free = "";
-            headset = "";
-            phone = "";
-            portable = "";
-            car = "";
-            default = [ "" "" "" ];
+        "custom/shade" = {
+          format = "";
+          tooltip = false;
+        };
+
+        "hyprland/window" = {
+          rewrite = {
+            "(.*) - (.*)" = "$1";
           };
+          separate-outputs = true;
         };
 
-        "tray" = {
-          icon-size = 20;
-          spacing = 5;
+        "hyprland/workspaces" = {};
+
+        network = {
+          format-wifi = "  {essid}";
+          format-ethernet = "";
+          format-disconnected = "<span color='#f38ba8'>󰖪    Offline</span>";
+          tooltip = false;
         };
 
-        "battery" = {
-          states = {
-            good = 95;
-            warning = 30;
-            critical = 20;
-          };
-          format = "{icon} {capacity}%";
-          format-charging = " {capacity}%";
-          format-plugged = " {capacity}%";
-          format-alt = "{time} {icon}";
-          format-icons = [ "󰂎" "󰁺" "󰁻" "󰁼" "󰁽" "󰁾" "󰁿" "󰂀" "󰂁" "󰂂" "󰁹" ];
+        pulseaudio = {
+          format = "{icon}  {volume}%";
+          format-icons = ["󰕿" "󰖀" "󰕾"];
+          format-muted = "<span color='#f38ba8'>󰖁  Muted</span>";
+          on-click = "${pkgs.pamixer}/bin/pamixer -t";
+          on-click-right = "pavucontrol";
+          scroll-step = 1;
+          tooltip = false;
         };
-      }
-    ];
+
+        tray = {};
+      };
+    };
 
     style = ''
       * {
-        font-family: "JetBrainsMono Nerd Font";
-        font-size: 16px;
         border: none;
-        border-radius: 0px;
-        min-height: 0;
-        margin: 0px;
-        padding: 0px;
+        border-radius: 0;
       }
 
-      @define-color base   #1a2a1a;
-      @define-color mantle #151f15;
-      @define-color crust  #101810;
+      #waybar {
+        background: rgba(0,0,0,0.0);
+        font-family: "JetBrainsMono Nerd Font";
+        font-size: 14px;
+        color: #ffffff;
+      }
 
-      @define-color text     #c8d5c8;
-      @define-color subtext0 #8a9a8a;
-      @define-color subtext1 #a0b0a0;
-
-      @define-color surface0 #2d4a2d;
-      @define-color surface1 #3a5a3a;
-      @define-color surface2 #4a6a4a;
-
-      @define-color overlay0 #4a5a4a;
-      @define-color overlay1 #5a6a5a;
-      @define-color overlay2 #6a7a6a;
-
-      @define-color blue      #4a8a7a;
-      @define-color lavender  #5a9a5a;
-      @define-color sapphire  #7a9a8a;
-      @define-color sky       #a0a870;
-      @define-color teal      #c05a5a;
-      @define-color green     #8a7a9a;
-      @define-color yellow    #5a8a8a;
-      @define-color peach     #fab387;
-      @define-color maroon    #a07070;
-      @define-color red       #b0a898;
-      @define-color mauve     #7a9a8a;
-      @define-color pink      #8a7a9a;
-      @define-color flamingo  #9a8a8a;
-      @define-color rosewater #b0a898;
-
-      @define-color theme_base_color #1a2a1a;
-
-      window#waybar {
+      #clock, #memory, #temperature, #cpu, #network,
+      #pulseaudio, #custom-nix, #custom-shade, #tray, #window {
+        font-weight: bold;
+        color: #ffffff;
         background: transparent;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        border-bottom: 1px solid transparent;
+        padding-left: 5px;
+        padding-right: 5px;
       }
 
-      window#waybar.hidden {
-        opacity: 0.2;
+      #custom-shade { padding-left: 0; margin-left: 5px; font-size: 16px; }
+      #window { padding-left: 2px; }
+      #clock { padding-right: 0; margin-right: 5px; }
+
+      #custom-nix {
+        font-size: 20px;
       }
 
-      #gleft1, #gright1 {
-        padding: 0px 0px 0px 5px;
-        margin: 6px 10px 2px 3px;
-        border: 3px solid rgba(14, 14, 14, .1);
-        border-radius: 30px;
-        background: @theme_base_color;
-        box-shadow: 0 0 2px rgba(0, 0, 0, 0.6);
-        transition: all .3s ease;
-        min-width: 120px;
-      }
-
-      #gright2 {
-        margin: 6px 10px 2px 3px;
-        border: 3px solid rgba(14, 14, 14, .1);
-        border-radius: 30px;
-        background: @theme_base_color;
-        box-shadow: 0 0 2px rgba(0, 0, 0, 0.6);
-        padding: 0px 0px 0px 5px;
-        transition: all .3s ease;
-      }
-
-      #window {
-        padding: 0px;
-        margin: 6px 10px 2px 3px;
-        border: 3px solid rgba(14, 14, 14, .1);
-        border-radius: 30px;
-        padding: 0px 8px;
-        color: @mauve;
-        background: @theme_base_color;
-      }
-
-      #workspaces {
-        background: @theme_base_color;
-        margin: 5px 5px;
-        padding: 8px 5px;
-        border-radius: 30px;
-        color: @mauve;
+      #workspaces * {
+        font-size: 14px;
       }
 
       #workspaces button {
-        padding: 0px 5px;
-        margin: 0px 3px;
-        border-radius: 30px;
-        color: @teal;
-        background: transparent;
-        transition: all 0.3s ease-in-out;
+        font-weight: bold;
+        color: #ffffff;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        padding-left: 4px;
+        padding-right: 4px;
       }
 
       #workspaces button.active {
-        background-color: @teal;
-        color: @teal;
-        border-radius: 16px;
-        min-width: 50px;
-        transition: all 0.3s ease-in-out;
-      }
-
-      #workspaces button:hover {
-        background-color: @maroon;
-        color: @maroon;
-        border-radius: 16px;
-        min-width: 50px;
-      }
-
-      #workspaces button.urgent {
-        color: @red;
-        border-radius: 0px;
-      }
-
-      #temperature {
-        color: @teal;
-        padding-left: 5px;
-        padding-right: 5px;
-      }
-
-      #temperature.critical {
-        background-color: @red;
-      }
-
-      #tray > .passive {
-        -gtk-icon-effect: dim;
-      }
-      #tray > .needs-attention {
-        -gtk-icon-effect: highlight;
-      }
-
-      #clock {
-        color: @yellow;
-        background: @theme_base_color;
-        margin: 6px 10px 2px 2px;
-        border-radius: 30px;
-        padding-left: 5px;
-        padding-right: 5px;
-        transition: all .3s ease;
-      }
-
-      #custom-icon {
-        font-size: 20px;
-        padding-left: 2px;
-        padding-right: 5px;
-        color: @mauve;
-      }
-
-      #cpu {
-        color: @yellow;
-        font-size: 15px;
-        padding-left: 5px;
-        padding-right: 5px;
-      }
-
-      #memory {
-        color: @green;
-        font-size: 15px;
-        padding-left: 5px;
-        padding-right: 5px;
-      }
-
-      #battery {
-        color: #a6da95;
-        padding-left: 5px;
-        padding-right: 5px;
-      }
-
-      @keyframes blink {
-        to { color: @surface0; }
-      }
-
-      #battery.critical:not(.charging) {
-        background-color: @red;
-        color: @text;
-        animation-name: blink;
-        animation-duration: 0.5s;
-        animation-timing-function: linear;
-        animation-iteration-count: infinite;
-        animation-direction: alternate;
-      }
-
-      #custom-notification {
-        color: #dfdfdf;
-        padding: 0px 5px;
-        border-radius: 5px;
-      }
-
-      #backlight {
-        color: @rosewater;
-        padding-left: 5px;
-        padding-right: 5px;
-      }
-
-      #pulseaudio {
-        color: @sapphire;
-        padding-left: 5px;
-        padding-right: 5px;
-      }
-
-      #pulseaudio.bluetooth {
-        color: @pink;
-        background: @theme_base_color;
-      }
-
-      #pulseaudio.muted {
-        color: @red;
-      }
-
-      #network {
-        color: #EE2091;
-        padding-left: 5px;
-        padding-right: 5px;
-      }
-
-      #network.disconnected,
-      #network.disabled {
-        background-color: @surface0;
-        color: @text;
-      }
-
-      #mpris {
-        color: @pink;
-        background: @theme_base_color;
-        margin: 6px 10px 2px 2px;
-        border-radius: 30px;
-        padding-left: 5px;
-        padding-right: 5px;
-        transition: all .3s ease;
-      }
-
-      #custom-power {
-        color: @red;
-        padding-left: 5px;
-        padding-right: 5px;
-      }
-
-      tooltip {
-        background: #1e1e2e;
-        border-radius: 8px;
-      }
-
-      tooltip label {
-        color: @text;
-        margin-right: 5px;
-        margin-left: 5px;
+        border-top: 1px solid black;
+        color: black;
+        background-color: rgba(255,255,255,0.85);
+        transition: 200ms;
+        transition-duration: 200ms;
       }
     '';
   };
-
 
   # Rofi
   programs.rofi = {
