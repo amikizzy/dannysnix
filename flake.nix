@@ -23,6 +23,9 @@
     nixosConfigurations = {
       # Desktop
       nixos = (import ./flake/nixos) {inherit inputs self;};
+
+      # Laptop - ThinkPad W540
+      laptop = (import ./flake/laptop) {inherit inputs self;};
     };
   };
 }
